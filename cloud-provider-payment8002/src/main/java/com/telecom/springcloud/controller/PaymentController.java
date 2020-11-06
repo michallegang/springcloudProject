@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Date：2020-10-29 19:42
  * Description：
@@ -42,6 +44,18 @@ public class PaymentController {
         }else {
             return new CommonResult(444,"未查询到对应记录,查询ID:"+id+",端口:"+serverPort,null);
         }
+
+    }
+
+    @GetMapping("/payment/feign/timeout")
+    public String paymentFeignTimeout(){
+
+        try {
+            TimeUnit.SECONDS.sleep(3);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return serverPort;
 
     }
 
