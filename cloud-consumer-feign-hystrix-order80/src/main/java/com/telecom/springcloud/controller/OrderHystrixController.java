@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @Slf4j
+//@DefaultProperties(defaultFallback = "paymentGlobalFallbackMethod")
 public class OrderHystrixController {
 
     @Autowired
@@ -25,11 +26,51 @@ public class OrderHystrixController {
         return result;
     }
 
+
+
+    // 单个方法上设置降级处理
+    /**
+     *
+    @GetMapping("/consumer/payment/hystrix/timeout/{id}")
+    @HystrixCommand(fallbackMethod = "paymentTimeOutFallbackMethod",commandProperties = {
+            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds",value = "3000")
+    })
+    public String paymentInfo_timeout(@PathVariable("id") Integer id){
+         String result = paymentHystrixService.paymentInfo_timeout(id);
+        log.info("order-hystrix-80 paymentInfo_timeout  result:"+result);
+
+        return "order-hystrix-80 paymentInfo_timeout  result:";
+    }
+    **/
+
+    //通过全局设置降级处理
+    /**
+     *
+     @GetMapping("/consumer/payment/hystrix/timeout/{id}")
+     @HystrixCommand
+     public String paymentInfo_timeout(@PathVariable("id") Integer id){
+         String result = paymentHystrixService.paymentInfo_timeout(id);
+         log.info("order-hystrix-80 paymentInfo_timeout  result:"+result);
+
+         return "order-hystrix-80 paymentInfo_timeout  result:";
+     }
+     **/
     @GetMapping("/consumer/payment/hystrix/timeout/{id}")
     public String paymentInfo_timeout(@PathVariable("id") Integer id){
-        String result = paymentHystrixService.paymentInfo_timeout(id);
-        log.info("order-hystrix-80 paymentInfo_timeout  result:"+result);
+       String result = paymentHystrixService.paymentInfo_timeout(id);
+     //   log.info("order-hystrix-80 paymentInfo_timeout  result:"+result);
+
         return result;
+    }
+
+    //兜底方法
+    public String paymentTimeOutFallbackMethod(@PathVariable("id") Integer id){
+        return "我是消费者80，对付支付系统繁忙请10秒钟后再试或者自己运行出错请检查自己,(┬＿┬)";
+    }
+
+    //兜底方法
+    public String paymentGlobalFallbackMethod(){
+        return "全局报错异常,(┬＿┬)";
     }
 
 }
