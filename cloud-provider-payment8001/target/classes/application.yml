@@ -27,7 +27,7 @@ eureka:
     fetch-registry: true
     service-url:
       #集群版 Eureka
-      defaultZone: http://eureka7001:7001/eureka,http://eureka7002:7002/eureka, http://eureka7003:7003/eureka
+      defaultZone: http://eureka7001:7001/eureka,http://eureka7002:7002/eureka
       #单机版 Eureka
       #defaultZone: http://eureka7001:7001/eureka
   instance:

@@ -47,6 +47,11 @@ public class PaymentController {
 
     }
 
+    @GetMapping("/payment/lb")
+    public String getLb(){
+        return serverPort;
+    }
+
     @GetMapping("/payment/feign/timeout")
     public String paymentFeignTimeout(){
 
